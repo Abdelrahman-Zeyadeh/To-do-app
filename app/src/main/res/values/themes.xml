@@ -1,0 +1,9 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.Project" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- هنا تحط ألوانك إن أحببت -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+</resources>
