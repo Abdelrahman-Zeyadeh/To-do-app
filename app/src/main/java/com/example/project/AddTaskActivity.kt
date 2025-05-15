@@ -19,7 +19,7 @@ class AddTaskActivity : AppCompatActivity() {
         val btnSave = findViewById<Button>(R.id.btnSaveTask)
         val spinner = findViewById<Spinner>(R.id.spinnerPriority)
 
-        // 🟡 Setup priorities
+        // Setup priorities
         val priorities = arrayOf("High", "Medium", "Low")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, priorities)
         spinner.adapter = adapter
