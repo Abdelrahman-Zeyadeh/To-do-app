@@ -2,6 +2,7 @@ package com.example.project
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -9,19 +10,24 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.Task
+import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.example.Task
+import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewCompletedTasks: RecyclerView
     private lateinit var fabAddTask: FloatingActionButton
 
     private val tasks = mutableListOf<Task>()
+    private val completedTasks = mutableListOf<Task>()
     private lateinit var taskAdapter: TaskAdapter
+    private lateinit var completedTaskAdapter: TaskAdapter
 
     companion object {
         const val REQUEST_CODE_ADD_TASK = 100
@@ -38,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
         recyclerView = findViewById(R.id.recyclerViewTasks)
+        recyclerViewCompletedTasks = findViewById(R.id.recyclerViewCompletedTasks)
         fabAddTask = findViewById(R.id.fabAddTask)
 
         val toggle = ActionBarDrawerToggle(
@@ -57,9 +64,13 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        taskAdapter = TaskAdapter(tasks)
+        taskAdapter = TaskAdapter(tasks) { task -> onTaskCompleted(task) }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = taskAdapter
+
+        completedTaskAdapter = TaskAdapter(completedTasks) { /* No action needed */ }
+        recyclerViewCompletedTasks.layoutManager = LinearLayoutManager(this)
+        recyclerViewCompletedTasks.adapter = completedTaskAdapter
 
         fabAddTask.setOnClickListener {
             val intent = Intent(this, AddTaskActivity::class.java)
@@ -78,6 +89,19 @@ class MainActivity : AppCompatActivity() {
                 taskAdapter.notifyItemInserted(tasks.size - 1)
                 recyclerView.scrollToPosition(tasks.size - 1)
             }
+        }
+    }
+
+    private fun onTaskCompleted(task: Task) {
+        tasks.remove(task)
+        completedTasks.add(task)
+        taskAdapter.notifyDataSetChanged()
+        completedTaskAdapter.notifyItemInserted(completedTasks.size - 1)
+
+        // Show the completed tasks recycler view if there are completed tasks
+        if (completedTasks.isNotEmpty()) {
+            recyclerViewCompletedTasks.visibility = View.VISIBLE
+            findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.VISIBLE
         }
     }
 }

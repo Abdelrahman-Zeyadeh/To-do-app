@@ -33,12 +33,11 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-// Explicit AppCompat and Material libraries to ensure resource linking
+    // Explicit AppCompat and Material libraries to ensure resource linking
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation(libs.androidx.activity)
@@ -47,6 +46,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
 }
-

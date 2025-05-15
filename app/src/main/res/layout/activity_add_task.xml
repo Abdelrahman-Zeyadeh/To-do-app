@@ -6,25 +6,102 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
-    <EditText
-        android:id="@+id/etTask"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter task"
+        android:text="Choose your mission : "
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textDirection="ltr"
+        android:gravity="start"
+        android:layout_marginBottom="8dp" />
+
+
+    <Spinner
+        android:id="@+id/spinnerTaskType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:minHeight="48dp"
+        android:background="@android:drawable/edit_text" />
+
+    <EditText
+        android:id="@+id/editTextTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter the task"
         android:inputType="text"
         android:padding="12dp"
         android:layout_marginBottom="12dp"
         android:background="@android:drawable/edit_text"
         android:elevation="2dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose the importance of your choice :"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textDirection="ltr"
+        android:gravity="start"
+        android:layout_marginBottom="8dp" />
+
 
     <Spinner
         android:id="@+id/spinnerPriority"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:minHeight="48dp"
+        android:background="@android:drawable/edit_text" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Date: "
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textDirection="ltr"
+        android:gravity="start"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="YYYY-MM-DD"
+        android:inputType="none"
+        android:focusable="false"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@android:drawable/edit_text" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Deadline: "
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textDirection="ltr"
+        android:gravity="start"
+        android:layout_marginBottom="8dp" />
+    <EditText
+        android:id="@+id/editTextDeadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="YYYY-MM-DD"
+        android:inputType="none"
+        android:focusable="false"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@android:drawable/edit_text" />
     <Button
-        android:id="@+id/btnSaveTask"
+        android:id="@+id/btnAddTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save Task"
