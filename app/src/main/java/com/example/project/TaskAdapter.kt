@@ -4,16 +4,19 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Task
 
-
-class TaskAdapter(private val tasks: List<Task>) :
-    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(
+    private val tasks: MutableList<Task>,
+    private val onTaskCompleted: (Task) -> Unit  // Callback for task completion
+) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val taskText: TextView = itemView.findViewById(R.id.taskText)
+        val taskText: TextView = itemView.findViewById(R.id.task_text)
+        val taskCheckbox: CheckBox = itemView.findViewById(R.id.task_checkbox)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -32,6 +35,13 @@ class TaskAdapter(private val tasks: List<Task>) :
             "medium" -> holder.taskText.setTextColor(Color.parseColor("#FFA500")) // Orange
             "low" -> holder.taskText.setTextColor(Color.GREEN)
             else -> holder.taskText.setTextColor(Color.BLACK)
+        }
+
+        // Handle checkbox completion
+        holder.taskCheckbox.isChecked = task.isCompleted
+        holder.taskCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            task.isCompleted = isChecked
+            onTaskCompleted(task)  // Notify completion
         }
     }
 

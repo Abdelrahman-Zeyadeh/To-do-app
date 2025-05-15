@@ -104,4 +104,5 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.VISIBLE
         }
     }
+
 }
