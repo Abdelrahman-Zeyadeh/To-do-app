@@ -20,7 +20,6 @@ class AddTaskActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeUtils.applyTheme(this)
         setContentView(R.layout.activity_add_task)
 
         val btnAddTask = findViewById<Button>(R.id.btnAddTask)
