@@ -34,9 +34,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var completedTaskAdapter: TaskAdapter
     private var selectedDate: String = ""
 
+
     companion object {
         const val REQUEST_CODE_ADD_TASK = 100
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

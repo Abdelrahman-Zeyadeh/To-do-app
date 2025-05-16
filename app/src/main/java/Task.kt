@@ -5,5 +5,5 @@ data class Task(
     val priority: String,
     var isCompleted: Boolean = false,
     val date: String = "",
-    val deadline: String = ""
+    val deadline: String = "",
 )

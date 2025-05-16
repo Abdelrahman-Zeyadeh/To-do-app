@@ -106,7 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save Task"
-        android:backgroundTint="#2196F3"
+        android:backgroundTint="#19D52D"
         android:textColor="#FFFFFF"
         android:elevation="4dp" />
 </LinearLayout>
