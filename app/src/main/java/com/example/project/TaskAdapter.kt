@@ -17,6 +17,7 @@ class TaskAdapter(
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskText: TextView = itemView.findViewById(R.id.task_text)
+        val taskDateDeadline: TextView = itemView.findViewById(R.id.task_date_deadline)
         val taskCheckbox: CheckBox = itemView.findViewById(R.id.task_checkbox)
 
         init {
@@ -39,6 +40,7 @@ class TaskAdapter(
                 else -> ""
             }
             taskText.text = "${task.title} - ${task.priority}$emoji"
+            taskDateDeadline.text = "Date: ${task.date}, Deadline: ${task.deadline}"
             taskCheckbox.isChecked = task.isCompleted
 
             // Set text color based on priority
