@@ -17,7 +17,6 @@
         android:gravity="start"
         android:layout_marginBottom="8dp" />
 
-
     <Spinner
         android:id="@+id/spinnerTaskType"
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
         android:layout_marginBottom="16dp"
         android:padding="12dp"
         android:minHeight="48dp"
-        android:background="@android:drawable/edit_text" />
+        android:background="@drawable/spinner_background" /> <!-- Use custom background -->
 
     <EditText
         android:id="@+id/editTextTask"
@@ -37,6 +36,7 @@
         android:layout_marginBottom="12dp"
         android:background="@android:drawable/edit_text"
         android:elevation="2dp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,6 @@
         android:gravity="start"
         android:layout_marginBottom="8dp" />
 
-
     <Spinner
         android:id="@+id/spinnerPriority"
         android:layout_width="match_parent"
@@ -56,7 +55,7 @@
         android:layout_marginBottom="16dp"
         android:padding="12dp"
         android:minHeight="48dp"
-        android:background="@android:drawable/edit_text" />
+        android:background="@drawable/spinner_background" /> <!-- Use custom background -->
 
     <TextView
         android:layout_width="match_parent"
@@ -90,6 +89,7 @@
         android:textDirection="ltr"
         android:gravity="start"
         android:layout_marginBottom="8dp" />
+
     <EditText
         android:id="@+id/editTextDeadline"
         android:layout_width="match_parent"
@@ -100,6 +100,7 @@
         android:padding="12dp"
         android:layout_marginBottom="12dp"
         android:background="@android:drawable/edit_text" />
+
     <Button
         android:id="@+id/btnAddTask"
         android:layout_width="match_parent"
@@ -108,5 +109,4 @@
         android:backgroundTint="#2196F3"
         android:textColor="#FFFFFF"
         android:elevation="4dp" />
-
 </LinearLayout>
