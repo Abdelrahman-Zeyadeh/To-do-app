@@ -1,10 +1,12 @@
 package com.example.project
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val REQUEST_CODE_ADD_TASK = 100
+        const val REQUEST_CODE_EDIT_TASK = 101
     }
 
 
@@ -66,23 +69,25 @@ class MainActivity : AppCompatActivity() {
 
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_home -> {
-                    // Handle home action
-                }
-                R.id.nav_settings -> {
-                    // Handle settings action
-                }
+                R.id.nav_home -> {}
+                R.id.nav_settings -> {}
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
 
-        // Initialize adapters
-        taskAdapter = TaskAdapter(tasks) { task -> onTaskCompleted(task) }
+        // إنشاء الـ adapters مرة واحدة فقط
+        taskAdapter = TaskAdapter(tasks,
+            onTaskCompleted = { task -> onTaskCompleted(task) },
+            onTaskLongClick = { task, position -> showTaskOptionsDialog(task, position, isCompleted = false) }
+        )
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = taskAdapter
 
-        completedTaskAdapter = TaskAdapter(completedTasks) { /* No action needed */ }
+        completedTaskAdapter = TaskAdapter(completedTasks,
+            onTaskCompleted = {},
+            onTaskLongClick = { task, position -> showTaskOptionsDialog(task, position, isCompleted = true) }
+        )
         recyclerViewCompletedTasks.layoutManager = LinearLayoutManager(this)
         recyclerViewCompletedTasks.adapter = completedTaskAdapter
 
@@ -103,33 +108,38 @@ class MainActivity : AppCompatActivity() {
                     showDatePickerDialog()
                     true
                 }
-                R.id.nav_settings -> {
-                    // Handle settings action
-                    true
-                }
+                R.id.nav_settings -> true
                 else -> false
             }
         }
 
-        // Initialize with all tasks
         selectedDateText.text = "All Tasks"
         filterTasksByDate()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_ADD_TASK && resultCode == RESULT_OK) {
-            val title = data?.getStringExtra("task")
-            val priority = data?.getStringExtra("priority")
-            val date = data?.getStringExtra("date") ?: ""
-            val deadline = data?.getStringExtra("deadline") ?: ""
+        if (resultCode == RESULT_OK && data != null) {
+            val title = data.getStringExtra("task")
+            val priority = data.getStringExtra("priority")
+            val date = data.getStringExtra("date") ?: ""
+            val deadline = data.getStringExtra("deadline") ?: ""
 
-            // Ensure title and priority are not null or empty
             if (!title.isNullOrEmpty() && !priority.isNullOrEmpty()) {
-                val newTask = Task(title, priority, date = date, deadline = deadline)
-                tasks.add(newTask)
-                filterTasksByDate()
-                recyclerView.scrollToPosition(tasks.size - 1)
+                if (requestCode == REQUEST_CODE_ADD_TASK) {
+                    val newTask = Task(title, priority, date = date, deadline = deadline)
+                    tasks.add(newTask)
+                    filterTasksByDate()
+                    recyclerView.scrollToPosition(tasks.size - 1)
+                } else if (requestCode == REQUEST_CODE_EDIT_TASK) {
+                    val position = data.getIntExtra("position", -1)
+                    if (position != -1 && position < tasks.size) {
+                        val editedTask = Task(title, priority, date = date, deadline = deadline)
+                        tasks[position] = editedTask
+                        filterTasksByDate()
+                        taskAdapter.notifyItemChanged(position)
+                    }
+                }
             }
         }
     }
@@ -139,7 +149,6 @@ class MainActivity : AppCompatActivity() {
         completedTasks.add(task)
         filterTasksByDate()
 
-        // Show the completed tasks recycler view if there are completed tasks
         if (completedTasks.isNotEmpty()) {
             recyclerViewCompletedTasks.visibility = View.VISIBLE
             findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.VISIBLE
@@ -174,13 +183,9 @@ class MainActivity : AppCompatActivity() {
             completedTasks.filter { it.date == selectedDate || it.deadline == selectedDate }.toMutableList()
         }
 
-        taskAdapter = TaskAdapter(filteredTasks) { task -> onTaskCompleted(task) }
-        recyclerView.adapter = taskAdapter
+        taskAdapter.updateTasks(filteredTasks)
+        completedTaskAdapter.updateTasks(filteredCompletedTasks)
 
-        completedTaskAdapter = TaskAdapter(filteredCompletedTasks) { /* No action needed */ }
-        recyclerViewCompletedTasks.adapter = completedTaskAdapter
-
-        // Update visibility of completed tasks section
         if (filteredCompletedTasks.isNotEmpty()) {
             recyclerViewCompletedTasks.visibility = View.VISIBLE
             findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.VISIBLE
@@ -188,5 +193,53 @@ class MainActivity : AppCompatActivity() {
             recyclerViewCompletedTasks.visibility = View.GONE
             findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.GONE
         }
+    }
+
+    private fun showTaskOptionsDialog(task: Task, position: Int, isCompleted: Boolean) {
+        val options = arrayOf("تعديل", "حذف")
+
+        AlertDialog.Builder(this)
+            .setTitle("اختر إجراء")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> {
+                        if (!isCompleted) {
+                            val intent = Intent(this, AddTaskActivity::class.java).apply {
+                                putExtra("task", task.title)
+                                putExtra("priority", task.priority)
+                                putExtra("date", task.date)
+                                putExtra("deadline", task.deadline)
+                                putExtra("taskType", "Single Task")
+                                putExtra("position", tasks.indexOf(task)) // الموقع في القائمة الأصلية
+                            }
+                            startActivityForResult(intent, REQUEST_CODE_EDIT_TASK)
+                        } else {
+                            Toast.makeText(this, "تعديل المهام المكتملة غير مفعّل", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    1 -> {
+                        if (isCompleted) {
+                            val originalIndex = completedTasks.indexOf(task)
+                            if (originalIndex != -1) {
+                                completedTasks.removeAt(originalIndex)
+                                completedTaskAdapter.notifyItemRemoved(originalIndex)
+                                if (completedTasks.isEmpty()) {
+                                    recyclerViewCompletedTasks.visibility = View.GONE
+                                    findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.GONE
+                                }
+                            }
+                        } else {
+                            val originalIndex = tasks.indexOf(task)
+                            if (originalIndex != -1) {
+                                tasks.removeAt(originalIndex)
+                                taskAdapter.notifyItemRemoved(originalIndex)
+                            }
+                        }
+                        Toast.makeText(this, "تم حذف المهمة", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("إلغاء", null)
+            .show()
     }
 }
