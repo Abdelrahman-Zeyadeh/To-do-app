@@ -22,10 +22,10 @@ class AddTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_task)
 
-        val btnAddTask = findViewById<Button>(R.id.btnAddTask)
-        val editTextTask = findViewById<EditText>(R.id.editTextTask)
-        val spinnerTaskType = findViewById<Spinner>(R.id.spinnerTaskType)
-        val spinnerPriority = findViewById<Spinner>(R.id.spinnerPriority)
+        val btnAddTask: Button = findViewById(R.id.btnAddTask)
+        val editTextTask: EditText = findViewById(R.id.editTextTask)
+        val spinnerTaskType: Spinner = findViewById(R.id.spinnerTaskType)
+        val spinnerPriority: Spinner = findViewById(R.id.spinnerPriority)
         editTextDate = findViewById(R.id.editTextDate)
         editTextDeadline = findViewById(R.id.editTextDeadline)
 
@@ -40,7 +40,12 @@ class AddTaskActivity : AppCompatActivity() {
 
         // Update hint based on spinner selection
         spinnerTaskType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 editTextTask.hint = if (position == 0) {
                     "Enter the task" // Single Task
                 } else {
@@ -91,10 +96,12 @@ class AddTaskActivity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-            val date = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
-            editText.setText(date)
-        }, year, month, day)
+        val datePickerDialog =
+            DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+                val date =
+                    String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                editText.setText(date)
+            }, year, month, day)
 
         datePickerDialog.show()
     }

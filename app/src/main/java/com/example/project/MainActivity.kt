@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = "قائمة المهام"
 
@@ -57,8 +57,11 @@ class MainActivity : AppCompatActivity() {
 
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_home -> { /* Do something */ }
-                R.id.nav_settings -> { /* Do something */ }
+                R.id.nav_home -> { /* Do something */
+                }
+
+                R.id.nav_settings -> { /* Do something */
+                }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
@@ -104,5 +107,4 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.VISIBLE
         }
     }
-
 }
