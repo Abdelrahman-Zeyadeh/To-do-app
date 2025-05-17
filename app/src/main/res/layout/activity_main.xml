@@ -27,6 +27,12 @@
                 android:background="#45D51A"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:queryHint="Search tasks..." />
+
             <!-- Selected Date Text -->
             <TextView
                 android:id="@+id/selectedDateText"
@@ -36,6 +42,7 @@
                 android:padding="8dp"
                 android:text="Tasks for: YYYY-MM-DD"
                 android:textSize="16sp" />
+
 
             <!-- RecyclerView for tasks -->
             <androidx.recyclerview.widget.RecyclerView

@@ -17,6 +17,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import java.util.*
+import androidx.appcompat.widget.SearchView
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var completedTaskAdapter: TaskAdapter
     private var selectedDate: String = ""
+    private lateinit var searchView: SearchView
+
 
     companion object {
         const val REQUEST_CODE_ADD_TASK = 100
@@ -45,6 +49,20 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Task List"
+
+        searchView = findViewById(R.id.searchView)
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { searchTasks(it) }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { searchTasks(it) }
+                return true
+            }
+        })
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
@@ -167,7 +185,6 @@ class MainActivity : AppCompatActivity() {
 
         datePickerDialog.show()
     }
-
     private fun filterTasksByDate() {
         val filteredTasks = if (selectedDate.isEmpty()) {
             tasks.toMutableList()
@@ -196,4 +213,33 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.GONE
         }
     }
+    private fun searchTasks(keyword: String) {
+        val filtered = tasks.filter {
+            it.title.contains(keyword, ignoreCase = true) ||
+                    it.priority.contains(keyword, ignoreCase = true) ||
+                    it.subtasks.any { sub -> sub.contains(keyword, ignoreCase = true) }
+        }
+
+        val filteredCompleted = completedTasks.filter {
+            it.title.contains(keyword, ignoreCase = true) ||
+                    it.priority.contains(keyword, ignoreCase = true) ||
+                    it.subtasks.any { sub -> sub.contains(keyword, ignoreCase = true) }
+        }
+
+        taskAdapter = TaskAdapter(filtered.toMutableList()) { task -> onTaskCompleted(task) }
+        recyclerView.adapter = taskAdapter
+
+        completedTaskAdapter = TaskAdapter(filteredCompleted.toMutableList()) { /* No action needed */ }
+        recyclerViewCompletedTasks.adapter = completedTaskAdapter
+
+        if (filteredCompleted.isNotEmpty()) {
+            recyclerViewCompletedTasks.visibility = View.VISIBLE
+            findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.VISIBLE
+        } else {
+            recyclerViewCompletedTasks.visibility = View.GONE
+            findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.GONE
+        }
+    }
+
+
 }

@@ -12,9 +12,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Task
 
 class TaskAdapter(
-    private val tasks: MutableList<Task>,
+    private val allTasks: MutableList<Task>,
     private val onTaskCompleted: (Task) -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+
+    private var tasks: MutableList<Task> = allTasks.toMutableList()
+
+    fun filter(query: String) {
+        tasks = if (query.isEmpty()) {
+            allTasks.toMutableList()
+        } else {
+            allTasks.filter {
+                it.title.contains(query, ignoreCase = true)
+            }.toMutableList()
+        }
+        notifyDataSetChanged()
+    }
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskText: TextView = itemView.findViewById(R.id.task_text)
