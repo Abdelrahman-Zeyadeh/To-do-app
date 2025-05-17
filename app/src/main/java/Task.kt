@@ -8,4 +8,5 @@ data class Task(
     val deadline: String = "",
     val subtasks: MutableList<String> = mutableListOf(),
     val taskType: String,
+
 )

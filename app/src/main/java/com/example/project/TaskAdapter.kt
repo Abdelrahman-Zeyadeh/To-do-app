@@ -16,7 +16,7 @@ class TaskAdapter(
     private val onTaskCompleted: (Task) -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
-    private var tasks: MutableList<Task> = allTasks.toMutableList()
+    private var tasks: MutableList<Task> = allTasks
 
     fun filter(query: String) {
         tasks = if (query.isEmpty()) {
@@ -39,14 +39,15 @@ class TaskAdapter(
         init {
             taskCheckbox.setOnCheckedChangeListener { _, isChecked ->
                 val task = tasks[adapterPosition]
-                task.isCompleted = isChecked
-                updateTaskTextStyle(task)
-
-                if (isChecked) {
-                    onTaskCompleted(task)
+                if (task.isCompleted != isChecked) {
+                    task.isCompleted = isChecked
+                    updateTaskTextStyle(task)
+                    onTaskCompleted(task) // <- Call this regardless of checked/unchecked
                 }
             }
         }
+
+
 
         fun bind(task: Task) {
             val emoji = when (task.priority.lowercase()) {
@@ -89,6 +90,7 @@ class TaskAdapter(
         val task = tasks[position]   // Get the task at the current position
 
         holder.bind(task)   // Bind common data to views (including priority, checkbox etc)
+
 
         // Then handle subtasks and visibility:
         if (task.taskType == "Task List" && task.subtasks.isNotEmpty()) {

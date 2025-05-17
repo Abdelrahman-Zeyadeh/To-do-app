@@ -160,16 +160,16 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun onTaskCompleted(task: Task) {
-        tasks.remove(task)
-        completedTasks.add(task)
-        filterTasksByDate()
-
-        // Show the completed tasks recycler view if there are completed tasks
-        if (completedTasks.isNotEmpty()) {
-            recyclerViewCompletedTasks.visibility = View.VISIBLE
-            findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.VISIBLE
+        if (task.isCompleted) {
+            tasks.remove(task)
+            completedTasks.add(task)
+        } else {
+            completedTasks.remove(task)
+            tasks.add(0, task) // This adds the task back to the top of active list
         }
+        filterTasksByDate()
     }
+
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -198,13 +198,14 @@ class MainActivity : AppCompatActivity() {
             completedTasks.filter { it.date == selectedDate || it.deadline == selectedDate }.toMutableList()
         }
 
+        // Set adapters
         taskAdapter = TaskAdapter(filteredTasks) { task -> onTaskCompleted(task) }
         recyclerView.adapter = taskAdapter
 
-        completedTaskAdapter = TaskAdapter(filteredCompletedTasks) { /* No action needed */ }
+        completedTaskAdapter = TaskAdapter(filteredCompletedTasks) { task -> onTaskCompleted(task) }
         recyclerViewCompletedTasks.adapter = completedTaskAdapter
 
-        // Update visibility of completed tasks section
+        // Show/hide completed task section
         if (filteredCompletedTasks.isNotEmpty()) {
             recyclerViewCompletedTasks.visibility = View.VISIBLE
             findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.VISIBLE
@@ -229,7 +230,7 @@ class MainActivity : AppCompatActivity() {
         taskAdapter = TaskAdapter(filtered.toMutableList()) { task -> onTaskCompleted(task) }
         recyclerView.adapter = taskAdapter
 
-        completedTaskAdapter = TaskAdapter(filteredCompleted.toMutableList()) { /* No action needed */ }
+        completedTaskAdapter = TaskAdapter(filteredCompleted.toMutableList()) { task -> onTaskCompleted(task) }
         recyclerViewCompletedTasks.adapter = completedTaskAdapter
 
         if (filteredCompleted.isNotEmpty()) {
@@ -240,6 +241,8 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.CompletedTasksTitle).visibility = View.GONE
         }
     }
+
+
 
 
 }
