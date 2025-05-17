@@ -117,20 +117,29 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_TASK && resultCode == RESULT_OK) {
-            val title = data?.getStringExtra("task")
-            val priority = data?.getStringExtra("priority")
-            val date = data?.getStringExtra("date") ?: ""
-            val deadline = data?.getStringExtra("deadline") ?: ""
+            val title = data?.getStringExtra("task") ?: return
+            val priority = data.getStringExtra("priority") ?: return
+            val type = data.getStringExtra("taskType") ?: "Single Task"
+            val date = data.getStringExtra("date") ?: ""
+            val deadline = data.getStringExtra("deadline") ?: ""
+            val subtasks = data.getStringArrayListExtra("subtasks") ?: arrayListOf()
 
-            // Ensure title and priority are not null or empty
-            if (!title.isNullOrEmpty() && !priority.isNullOrEmpty()) {
-                val newTask = Task(title, priority, date = date, deadline = deadline)
-                tasks.add(newTask)
-                filterTasksByDate()
-                recyclerView.scrollToPosition(tasks.size - 1)
-            }
+            val newTask = Task(
+                title = title,
+                isCompleted = false,
+                priority = priority,
+                taskType = type,
+                date = date,
+                deadline = deadline,
+                subtasks = subtasks
+            )
+
+            tasks.add(newTask)
+            filterTasksByDate()
+            recyclerView.scrollToPosition(tasks.size - 1)
         }
     }
+
 
     private fun onTaskCompleted(task: Task) {
         tasks.remove(task)

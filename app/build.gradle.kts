@@ -26,6 +26,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -42,6 +43,10 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview) // This line uses the alias from libs
+
+    // Explicitly adding RecyclerView dependency (if needed)
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

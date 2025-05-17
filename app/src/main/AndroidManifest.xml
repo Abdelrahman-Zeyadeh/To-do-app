@@ -14,12 +14,10 @@
         android:theme="@style/Theme.Project"
         tools:targetApi="31">
 
-        <!-- نشاط إضافة مهمة -->
         <activity
             android:name=".AddTaskActivity"
-            android:exported="true" /> <!-- true لأنك تسمح باستدعائه من خارج التطبيق -->
+            android:exported="true" />
 
-        <!-- النشاط الرئيسي -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -29,8 +27,6 @@
             </intent-filter>
         </activity>
 
-        <!-- لا حاجة لنشاط مكرر، احذف السطر التالي -->
-        <!-- <activity android:name="com.example.com.example.project.MainActivity" /> -->
 
     </application>
 

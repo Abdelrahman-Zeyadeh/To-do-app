@@ -27,6 +27,16 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@android:color/darker_gray" />
+
+        <!-- Subtasks container added here -->
+        <LinearLayout
+            android:id="@+id/subtaskContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:paddingStart="16dp"
+            android:paddingTop="4dp" />
     </LinearLayout>
 
 </LinearLayout>

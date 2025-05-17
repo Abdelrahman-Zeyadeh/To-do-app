@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F5F5F5">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="16dp"
@@ -101,6 +107,51 @@
         android:layout_marginBottom="12dp"
         android:background="@android:drawable/edit_text" />
 
+    <LinearLayout
+        android:id="@+id/subtaskLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Sub Tasks:"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/editTextSubtask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter sub task"
+            android:inputType="text"
+            android:padding="12dp"
+            android:background="@android:drawable/edit_text"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnAddSubtask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Sub Task"
+            android:backgroundTint="#0BBF31"
+            android:textColor="#FFFFFF"
+            android:elevation="2dp"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSubtasks"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#E0E0E0"
+            android:padding="8dp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/btnAddTask"
         android:layout_width="match_parent"
@@ -110,3 +161,4 @@
         android:textColor="#FFFFFF"
         android:elevation="4dp" />
 </LinearLayout>
+</ScrollView>

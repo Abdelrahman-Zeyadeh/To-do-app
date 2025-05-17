@@ -43,6 +43,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
+            <LinearLayout
+                android:id="@+id/subtaskLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
+
 
             <TextView
                 android:id="@+id/CompletedTasksTitle"
